@@ -1,0 +1,144 @@
+class Node {
+    int data;
+    Node prev;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+public class DLL {
+    Node head = null;
+
+    // Insert at beginning
+    public void insertAtBeginning(int data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
+        if (head != null) {
+            head.prev = newNode;
+        }
+        head = newNode;
+        System.out.println("Inserted at beginning: " + data);
+    }
+    public void insertAtEnd(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+            System.out.println("Inserted at end (as first node): " + data);
+            return;
+        }
+
+        Node temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+
+        temp.next = newNode;
+        newNode.prev = temp;
+        System.out.println("Inserted at end: " + data);
+    }
+    public void deleteAtBeginning() {
+        if (head == null) {
+            System.out.println("List is empty. Cannot delete.");
+            return;
+        }
+
+        System.out.println("Deleted from beginning: " + head.data);
+        head = head.next;
+
+        if (head != null) {
+            head.prev = null;
+        }
+    }
+    public void deleteAtEnd() {
+        if (head == null) {
+            System.out.println("List is empty. Cannot delete.");
+            return;
+        }
+
+        if (head.next == null) {
+            System.out.println("Deleted from end: " + head.data);
+            head = null;
+            return;
+        }
+
+        Node temp = head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+
+        System.out.println("Deleted from end: " + temp.data);
+        temp.prev.next = null;
+    }
+    public void deleteAtSpecificPosition(int position) {
+        if (head == null) {
+            System.out.println("List is empty. Cannot delete.");
+            return;
+        }
+
+        if (position <= 0) {
+            System.out.println("Invalid position: " + position);
+            return;
+        }
+
+        if (position == 1) {
+            System.out.println("Deleted node at position 1: " + head.data);
+            head = head.next;
+            if (head != null) {
+                head.prev = null;
+            }
+            return;
+        }
+
+        Node temp = head;
+        int count = 1;
+        while (temp != null && count < position) {
+            temp = temp.next;
+            count++;
+        }
+
+        if (temp == null) {
+            System.out.println("Position " + position + " is out of bounds.");
+            return;
+        }
+
+        System.out.println("Deleted node at position " + position + ": " + temp.data);
+
+        if (temp.next != null) {
+            temp.next.prev = temp.prev;
+        }
+        if (temp.prev != null) {
+            temp.prev.next = temp.next;
+        }
+    }
+    public void display() {
+        Node temp = head;
+        System.out.print("Current List: ");
+        while (temp != null) {
+            System.out.print(temp.data + " <-> ");
+            temp = temp.next;
+        }
+        System.out.println("null");
+    }
+    public static void main(String[] args) {
+        DLL list = new DLL();
+
+        // Insert elements
+        list.insertAtBeginning(10);
+        list.insertAtBeginning(20);
+        list.insertAtEnd(30);
+        list.insertAtEnd(40);
+        list.display();
+        list.deleteAtBeginning();
+        list.deleteAtEnd();
+        list.display();
+
+        list.deleteAtSpecificPosition(2); 
+        list.display();
+
+        list.deleteAtSpecificPosition(5);
+    }
+}
